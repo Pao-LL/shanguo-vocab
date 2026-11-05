@@ -41,6 +41,7 @@ declare global {
     vocabStore?: {
       loadState: () => Promise<AppState>
       saveState: (state: AppState) => Promise<AppState>
+      loadDict: () => Promise<Word[]>
     }
   }
 }

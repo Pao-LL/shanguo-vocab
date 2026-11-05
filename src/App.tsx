@@ -139,9 +139,15 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    fetch("./dicts/kaoyanshanguo2025.json")
-      .then((r) => r.json())
-      .then((data: Word[]) => setWords(data))
+    const loadWords = async () => {
+      if (window.vocabStore?.loadDict) {
+        setWords(await window.vocabStore.loadDict())
+        return
+      }
+      const r = await fetch("./dicts/kaoyanshanguo2025.json")
+      setWords(await r.json())
+    }
+    loadWords().catch(() => setWords([]))
     loadState().then(setState)
   }, [])
 
@@ -340,7 +346,7 @@ function Library({
       <header className="flex flex-wrap items-end justify-between gap-6 pb-8 border-b border-line">
         <div>
           <p className="text-sm text-mute mb-3">闪过 2025 · {words.length} 词</p>
-          <h1 className="font-serif text-5xl md:text-6xl font-semibold leading-none">考研闪过</h1>
+          <h1 className="font-serif text-5xl md:text-6xl font-semibold leading-none">闪过</h1>
         </div>
         <button type="button" onClick={onCreate} className="solid-btn">
           <Plus size={16} />
